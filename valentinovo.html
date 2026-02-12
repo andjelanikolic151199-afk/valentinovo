@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Za Nikolu</title>
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* POZADINA */
+.bg{
+ position:fixed;
+ inset:0;
+ background:linear-gradient(160deg,#ff2d75,#ff6fa5,#ffd1e6);
+ z-index:-2;
+}
+
+body{
+ margin:0;
+ height:100vh;
+ overflow:hidden;
+ font-family:'Montserrat',sans-serif;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ perspective:1000px;
+}
+
+/* SADRŽAJ (IZNAD SRCA) */
+.content{
+ position:absolute;
+ text-align:center;
+ opacity:0;
+ transform:scale(.8);
+ transition:1.2s;
+ z-index:20; /* 👈 TEKST IZNAD SRCA */
+}
+
+.show{
+ opacity:1;
+ transform:scale(1);
+}
+
+h1{
+ font-size: clamp(32px,8vw,64px);
+ color:white;
+ letter-spacing:3px;
+ text-shadow:0 0 30px rgba(255,255,255,0.7);
+ margin:0;
+}
+
+.names{
+ font-size: clamp(26px,6vw,48px);
+ color:white;
+ margin-top:25px;
+}
+
+.date{
+ font-size: clamp(16px,4vw,22px);
+ color:white;
+ margin-top:5px;
+}
+
+/* KOVERTA */
+.envelope{
+ position:fixed;
+ inset:0;
+ background:#ffd6e7;
+ z-index:30; /* 👈 NAJVIŠI DOK TRAJE ANIMACIJA */
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ flex-direction:column;
+ animation:fadeOut 1.5s forwards;
+ animation-delay:3s;
+}
+
+.flap{
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:50%;
+ background:#ffc2da;
+ clip-path:polygon(0 0,100% 0,50% 100%);
+ transform-origin:top;
+ animation:openFlap 1.5s forwards;
+ animation-delay:1s;
+ z-index:31;
+ backface-visibility:hidden;
+}
+
+/* CSS SRCE */
+.heart-shape{
+ position:relative;
+ width:100%;
+ height:100%;
+ background:currentColor;
+ transform:rotate(-45deg);
+}
+
+.heart-shape::before,
+.heart-shape::after{
+ content:"";
+ position:absolute;
+ width:100%;
+ height:100%;
+ background:currentColor;
+ border-radius:50%;
+}
+
+.heart-shape::before{
+ top:-50%;
+ left:0;
+}
+
+.heart-shape::after{
+ left:50%;
+ top:0;
+}
+
+.seal{
+ width:80px;
+ height:80px;
+ color:#ff3b6b;
+ z-index:32;
+}
+
+@keyframes openFlap{
+ to{ transform:rotateX(180deg); }
+}
+
+@keyframes fadeOut{
+ to{ opacity:0; visibility:hidden; }
+}
+
+/* LEBDEĆA SRCA (IZA TEKSTA) */
+.heart{
+ position:absolute;
+ top:-40px;
+ z-index:1; /* 👈 SRCA ISPOD TEKSTA */
+ opacity:0.6;
+ animation:fall linear forwards;
+}
+
+@keyframes fall{
+ to{ transform:translateY(110vh) rotate(360deg); }
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="content" id="content">
+<h1>SREĆAN DAN ZALJUBLJENIH</h1>
+<div class="names">Andjela i Nikola</div>
+<div class="date">04.10.2025.</div>
+</div>
+
+<div class="envelope">
+<div class="seal">
+  <div class="heart-shape"></div>
+</div>
+<div class="flap"></div>
+</div>
+
+<script>
+
+setTimeout(()=>{
+ document.getElementById("content")
+ .classList.add("show");
+ startHearts();
+},3200);
+
+/* GENERATOR CSS SRCA */
+function startHearts(){
+ setInterval(()=>{
+
+   let heart=document.createElement("div");
+   heart.className="heart";
+
+   let size=18+Math.random()*40;
+   heart.style.width=size+"px";
+   heart.style.height=size+"px";
+   heart.style.left=Math.random()*100+"vw";
+   heart.style.animationDuration=(4+Math.random()*4)+"s";
+
+   let hue=330+Math.random()*30;
+   heart.style.color="hsl("+hue+",85%,60%)";
+
+   let shape=document.createElement("div");
+   shape.className="heart-shape";
+
+   heart.appendChild(shape);
+   document.body.appendChild(heart);
+
+   setTimeout(()=>heart.remove(),8000);
+
+ },200);
+}
+
+</script>
+
+</body>
+</html>
